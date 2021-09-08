@@ -5,7 +5,7 @@ const readline = require('readline').createInterface({
   });
    
   readline.question('Enter players: ', players => {
-    findMatch(players);  
+    findMatch(players); 
     readline.close();
   })
 
@@ -13,33 +13,55 @@ const readline = require('readline').createInterface({
 //Reduce array to a two digit number
 function reduceArray(valueArray){
     let halfWay = 0;
-    let tempArray = [];
 
-	if(myArray.length%2 === 0){
-		halfWay = myArray.length/2;
+    if(valueArray.length == 2 && valueArray[0] < 10 && valueArray[1] < 10){
+    	return valueArray[0].toString()+valueArray[1].toString(); 
+	    // return valueArray.length;
+	}else if(valueArray.length < 2){
+		return valueArray[0];
+	}
+
+	if(valueArray.length%2 === 0){
+		halfWay = valueArray.length/2;
 	}else{
-		halfWay = Math.floor(myArray.length/2)+1;
+		halfWay = Math.floor(valueArray.length/2)+1;
 	}
 
 	console.log("Halfway: %d", halfWay);
-	console.log("Original: ", myArray);
+	console.log("Original: ", valueArray);
 
-	for(let l = 0, r = myArray.length-1; l < halfWay, r > halfWay-1; l++, r--){
+	let tempArray = [];
+	
+	if(valueArray.length == 2){
+		let d = valueArray[0].toString() + valueArray[1].toString();
+		let s = d.split("");
+		for(let a = 0; a < s.length; a++){
+			valueArray[a] = parseInt(s[a]);
+		}
+	}
+	
+	for(let l = 0, r = valueArray.length-1; l < halfWay, r > halfWay-1; l++, r--){
 		let temp = 0;
 		console.log("l: %d, r: %d", l,r);
-		temp = myArray[l] + myArray[r];
+		temp = valueArray[l] + valueArray[r];
 		tempArray.push(temp);
 		
-		if(myArray%2 !== 0 && l+1 == r-1){
-			temp = myArray[l];
-			tempArray.push(myArray[l+1]);
+		if(valueArray%2 !== 0 && l+1 == r-1){
+			temp = valueArray[l];
+			tempArray.push(valueArray[l+1]);
 		}
 		
 		console.log("New Array: ", tempArray);
 	}
+
+	return reduceArray(tempArray);
 }
 
 function findMatch(players){
+
+    let player1 = players.split(' ')[0];
+    let player2 = players.split(' ')[2];
+
     //Remove white spaces and split the string to an array
     let playersArray = (players.replace(/\s+/g, '')).split('');
     console.log(playersArray);
@@ -62,5 +84,16 @@ function findMatch(players){
     let valueArray = Array.from(freq.values());
     console.log(valueArray);
     console.log("Value Array Length = %d",valueArray.length);
-    reduceArray(valueArray);
+    // console.log(reduceArray(valueArray));
+
+    let score = reduceArray(valueArray);
+    if(score >= 80){
+    	console.log("%s matches %s %d\%, good match!", player1, player2, score);
+    }else{
+    	console.log("%s matches %s %d\%", player1, player2, score);
+    }
 }
+
+// let scoreboard = 
+// let twoDigits = reduceArray(valueArray);
+// console.log(twoDigits)
