@@ -1,3 +1,4 @@
+//Get input from the user
 const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
@@ -8,14 +9,34 @@ const readline = require('readline').createInterface({
     readline.close();
   })
 
+  
+//Reduce array to a two digit number
+function reduceArray(valueArray){
+    let left = 0;
+    let right = 0;
+    if(valueArray.length%2 == 0){
+        left = valueArray.length/2;
+        right = left;
+    }else{
+        left = Math.floor(valueArray.length/2)+1;
+        right = left-1;
+    }
+    console.log("Left: %d, Right: %d", left, right)
+}
+
 function findMatch(players){
+    //Remove white spaces and split the string to an array
     let playersArray = (players.replace(/\s+/g, '')).split('');
     console.log(playersArray);
     let freq =  new Map();
+
+    //Iterate throught playersArray and make each character a key of the freq map 
     for(let i=0; i < playersArray.length; i++){
+        //If the character is in the map increment value
         if(freq.has(playersArray[i])){
             freq.set(playersArray[i],parseInt(freq.get(playersArray[i]))+1);
         } else{
+        //If it's not create a new pair
             freq.set(playersArray[i],1);
         }
 
@@ -24,10 +45,7 @@ function findMatch(players){
     }
 
     let valueArray = Array.from(freq.values());
-
-    // for(let a = 0; a < freq.length; a++){
-    //     console.log(freq[a]);
-    // }
     console.log(valueArray);
-    console.log(freq.values());
+    console.log("Value Array Length = %d",valueArray.length);
+    reduceArray(valueArray);
 }
