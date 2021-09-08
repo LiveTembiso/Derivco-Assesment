@@ -12,16 +12,31 @@ const readline = require('readline').createInterface({
   
 //Reduce array to a two digit number
 function reduceArray(valueArray){
-    let left = 0;
-    let right = 0;
-    if(valueArray.length%2 == 0){
-        left = valueArray.length/2;
-        right = left;
-    }else{
-        left = Math.floor(valueArray.length/2)+1;
-        right = left-1;
-    }
-    console.log("Left: %d, Right: %d", left, right)
+    let halfWay = 0;
+    let tempArray = [];
+
+	if(myArray.length%2 === 0){
+		halfWay = myArray.length/2;
+	}else{
+		halfWay = Math.floor(myArray.length/2)+1;
+	}
+
+	console.log("Halfway: %d", halfWay);
+	console.log("Original: ", myArray);
+
+	for(let l = 0, r = myArray.length-1; l < halfWay, r > halfWay-1; l++, r--){
+		let temp = 0;
+		console.log("l: %d, r: %d", l,r);
+		temp = myArray[l] + myArray[r];
+		tempArray.push(temp);
+		
+		if(myArray%2 !== 0 && l+1 == r-1){
+			temp = myArray[l];
+			tempArray.push(myArray[l+1]);
+		}
+		
+		console.log("New Array: ", tempArray);
+	}
 }
 
 function findMatch(players){
