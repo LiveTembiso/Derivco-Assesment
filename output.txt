@@ -1,0 +1,11 @@
+jack matches kimberly 91%, good match!
+jason matches leticia 82%, good match!
+jack matches leticia 72%
+jason matches billy 71%
+tommy matches leticia 64%
+billy matches billy 62%
+jason matches jill 61%
+jack matches jill 60%
+tommy matches billy 53%
+tommy matches jill 52%
+tommy matches kimberly 20%
