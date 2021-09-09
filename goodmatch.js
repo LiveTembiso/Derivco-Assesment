@@ -19,27 +19,29 @@
 // })
   
 function main(){
-	//console.log(readCSV("./players.csv"));
-
 	let players = readCSV("./players.csv");
+	//Sort the groups alphabeticaly
 	let males = players[0].sort();
 	let females = players[1].sort();
 	let results = new Map();
 
+	//Loop through the two groups, calculate the match up of each male player to each female player and clean the results
 	for(let i = 0; i < males.length-1; i++){
 		for(let j = 0; j < females.length-1; j++){
-			// results.push(match([males[i], females[j]]).slice(0,-2).trim());
 			let score = match([males[i], females[j]]).slice(-2,).trim();
 			let matchUp = match([males[i], females[j]]).slice(0,-2).trim();
 			results.set(parseInt(score), matchUp);
 		}
 	}
-	results = new Map([...results.entries()].sort().reverse());
-	// console.log(results);
 
+	//Sort the results map in ascending order and reverse it to descending order
+	results = new Map([...results.entries()].sort().reverse());
+
+	//Make an array from the results map values
 	let resultsArray = Array.from(results.values());
 	console.log(resultsArray);
-	
+
+	//Write the results to output.txt
 	let fs = require('fs');
 	const writeStream = fs.createWriteStream('output.txt');
 	const pathName = writeStream.path;
@@ -66,23 +68,24 @@ function readCSV(filename){
 	let females = [];
 	let regex = /^[a-zA-Z ]*$/;
 
+	//Iterate through the lines in the csv document
 	for(let i = 0; i < players.length; i++){
 		let gender = players[i].trim().slice(-1);
 		player = players[i].slice(0,-1).trim().replace(/,/g, '').toLowerCase();
 		
-		// console.log(gender);
+		// Add players to appropriate arrays and raise an error if something is fishy
 		if(regex.test(player) && gender === "m" && !males.includes(player)){
 			males.push(player);
 		}else if(regex.test(player) && gender === "f" && !females.includes(player)){
 			females.push(player);
+		}else if(!regex.test(player)){
+			console.log(`${player} must be the player's name.`);
+		}else{
+			console.log(`${gender} must be the player's gender, either m or f.`);
 		}
 	}
-	// console.log(females);
-	// console.log(males)
 	return([males,females]);
 }
-
-// console.log(readCSV("./players.csv"));
   
 //Reduce array to a two digit number
 function reduceArray(valueArray){
@@ -91,7 +94,6 @@ function reduceArray(valueArray){
     //Base Case: return two digits that are less than 10
     if(valueArray.length == 2 && valueArray[0] < 10 && valueArray[1] < 10){
     	return valueArray[0].toString()+valueArray[1].toString(); 
-	    // return valueArray.length;
 	}else if(valueArray.length < 2){
 		return valueArray[0].toString();
 	}
@@ -103,26 +105,19 @@ function reduceArray(valueArray){
 		halfWay = Math.floor(valueArray.length/2)+1;
 	}
 
-	// console.log("Halfway: %d", halfWay);
-	// console.log("Original: ", valueArray);
-
 	let tempArray = [];
-	
 	//Split arrays with the length of two to single digits
 	if(valueArray.length == 2){
-		//console.log((valueArray.length == 2 && valueArray[0] < 10 && valueArray[1] < 10));
 		let d = valueArray[0].toString() + valueArray[1].toString();
 		let s = d.split("");
 		for(let a = 0; a < s.length; a++){
 			valueArray[a] = parseInt(s[a]);
 		}
-		// console.log("New Original: ",valueArray)
 	}
 	
+	//Simultaneusly iterate the value array from left and right, add corresponding values in the process 
 	for(let l = 0, r = valueArray.length-1; l < halfWay, r > halfWay-1; l++, r--){
 		let temp = 0;
-		// console.log(valueArray.length);
-		// console.log("l: %d, r: %d", l,r);
 		temp = valueArray[l] + valueArray[r];
 		tempArray.push(temp);
 		
@@ -132,13 +127,13 @@ function reduceArray(valueArray){
 			tempArray.push(valueArray[l+1]);
 			return reduceArray(tempArray);
 		}
-		
-		// console.log("New Array: ", tempArray);
 	}
 
+	//Reduce the array even futher
 	return reduceArray(tempArray);
 }
 
+//Calculate how two players match up against each other
 function match(players){
 	let player1 = players[0];
     let player2 = players[1];
@@ -158,18 +153,14 @@ function match(players){
     }
 
     let valueArray = Array.from(freq.values());
-    // console.log(valueArray);
-    // console.log("Value Array Length = %d",valueArray.length);
-    // console.log(reduceArray(valueArray));
 
     //Calculate the score
     let score = reduceArray(valueArray);
 
+    //Return appropriate string depending on macth up/score of the players
     if(score >= 80){
     	return `${player1} matches ${player2} ${score}\%, good match! ${score}`;
     }else{
     	return `${player1} matches ${player2} ${score}\% ${score}`;
     }
 }
-
-// match(["Jack", "Jill"]);
