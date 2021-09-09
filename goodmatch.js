@@ -1,14 +1,48 @@
 //Get input from the user
-const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
+// const readline = require('readline').createInterface({
+//     input: process.stdin,
+//     output: process.stdout
+//   });
    
-  readline.question('Enter players: ', players => {
-    findMatch(players); 
-    readline.close();
-  })
+// readline.question('Enter players: ', userInput => {
+  	
+//   	let regex = /^[a-zA-Z ]*$/;
+//   	let matchUp = (userInput.trim()).toLowerCase().split(' ');
+//   	// regex.test(userInput.trim()) && 
+//   	if(regex.test(userInput.trim()) && matchUp.length == 3 && matchUp[1].toLowerCase() == "matches"){
+//   		findMatch(userInput.toLowerCase());
+//   	}else{
+//   		console.log("Please enter valid input:\n{Name1} matches {Name2}");
+//   	}
+     
+//     readline.close();
+// })
+  
+//Read csv file and return array
+function readCSV(filename){
+	let fs = require('fs');
+	let content = fs.readFileSync(filename).toString();
+	let players = content.split("\r\n");
+	let males = [];
+	let females = [];
 
+	for(let i = 0; i < players.length; i++){
+		let gender = players[i].trim().slice(-1);
+		player = players[i].slice(0,-1).trim().replace(/,/g, '');
+		
+		// console.log(gender);
+		if(gender === "m" && !males.includes(player)){
+			males.push(player);
+		}else if(gender === "f" && !females.includes(player)){
+			females.push(player);
+		}
+	}
+	console.log(females);
+	console.log(males)
+	return(players);
+}
+
+console.log(readCSV("./players.csv"));
   
 //Reduce array to a two digit number
 function reduceArray(valueArray){
